@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <string.h>
 
 #define MAX_CONTACTS 100
 
@@ -17,7 +18,8 @@ int main() {
         printf("\n===== RUBRICA =====\n");
         printf("1. Aggiungi contatto\n");
         printf("2. Visualizza contatti\n");
-        printf("3. Esci\n");
+        printf("3. Cerca contatto\n");
+        printf("4. Esci\n");
         printf("Scelta: ");
         scanf("%d", &choice);
 
@@ -52,10 +54,32 @@ int main() {
                 }
             }
             break;
-
+        
         case 3:
+            char searchName[50]; 
+            int found = 0;
+            printf("Inserisci nome da cercare: ");
+            scanf("%s", searchName);
+
+            for (int i = 0; i < count; i++) {
+                if (strcmp(contacts[i].name, searchName) == 0) {
+                    printf("\nContatto trovato!\n");
+                    printf("Nome: %s\n", contacts[i].name);
+                    printf("Telefono: %s\n", contacts[i].phone);
+                    found = 1;
+                    break;
+                }
+            }
+            if (found == 0) {
+                printf("Contatto non trovato.\n");
+            }
+            break;
+
+        case 4:
             printf("Uscita...\n");
             return 0;
+
+
 
         default:
             printf("Scelta non valida!\n");
