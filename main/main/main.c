@@ -9,6 +9,68 @@ typedef struct {
     char phone[20];
 } Contact;
 
+
+//Funzione aggiunta contatto
+void addContact(Contact contacts[], int *count) {
+    if (*count >= MAX_CONTACTS) {
+        printf("Rubrica piena!\n");
+        return;
+    }
+
+    printf("Nome: ");
+    scanf("%s", contacts[*count].name);
+
+    printf("Telefono: ");
+    scanf("%s", contacts[*count].phone);
+
+    (*count)++;
+
+    printf("Contatto aggiunto!\n");
+
+}
+//Funzione visualizzazione
+void showContacts(Contact contacts[], int count) {
+    if (count == 0) {
+        printf("Nessun contatto.\n");
+        return;
+
+    }
+    for (int i = 0; i < count; i++) {
+        printf("\nContatto %d\n", i);
+        printf("\n Nome: %s", contacts[i].name);
+        printf("\n Telefono:%s", contacts[i].phone);
+    }
+}
+
+
+// Funzione ricerca
+void searchContact(Contact contacts[], int count) {
+    char searchName[50];
+    int found = 0;
+
+    printf("Inserisci nome da cercare:");
+    scanf("%s", searchName);
+
+    for (int i = 0; i < count;i++) {
+        if (strcmp(contacts[i].name, searchName) == 0) {
+            printf("\nContatto trovato!");
+            printf("\nNome: %s\n", contacts[i].name);
+            printf("Telefono: %s\n", contacts[i].phone);
+            found = 1;
+            break;
+
+        }
+
+
+
+    }
+    if (found == 0) {
+        printf("\nContatto non trovato!");
+    }
+    
+}
+
+
 int main() {
     Contact contacts[MAX_CONTACTS];
     int count = 0;
@@ -26,53 +88,15 @@ int main() {
         switch (choice) {
 
         case 1:
-            if (count < MAX_CONTACTS) {
-                printf("Nome: ");
-                scanf("%s", contacts[count].name);
-
-                printf("Telefono: ");
-                scanf("%s", contacts[count].phone);
-
-                count++;
-
-                printf("Contatto aggiunto!\n");
-            }
-            else {
-                printf("Rubrica piena!\n");
-            }
+            addContact(contacts, &count);
             break;
 
         case 2:
-            if (count == 0) {
-                printf("Nessun contatto.\n");
-            }
-            else {
-                for (int i = 0; i < count; i++) {
-                    printf("\nContatto %d\n", i + 1);
-                    printf("Nome: %s\n", contacts[i].name);
-                    printf("Telefono: %s\n", contacts[i].phone);
-                }
-            }
+            showContacts(contacts, count);
             break;
         
         case 3:
-            char searchName[50]; 
-            int found = 0;
-            printf("Inserisci nome da cercare: ");
-            scanf("%s", searchName);
-
-            for (int i = 0; i < count; i++) {
-                if (strcmp(contacts[i].name, searchName) == 0) {
-                    printf("\nContatto trovato!\n");
-                    printf("Nome: %s\n", contacts[i].name);
-                    printf("Telefono: %s\n", contacts[i].phone);
-                    found = 1;
-                    break;
-                }
-            }
-            if (found == 0) {
-                printf("Contatto non trovato.\n");
-            }
+            searchContact(contacts, count);
             break;
 
         case 4:
