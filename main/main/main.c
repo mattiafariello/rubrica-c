@@ -1,8 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
-#define MAX_CONTACTS 100
 
 typedef struct {
     char name[50];
@@ -10,18 +10,28 @@ typedef struct {
 } Contact;
 
 
-//Funzione aggiunta contatto
-void addContact(Contact contacts[], int *count) {
-    if (*count >= MAX_CONTACTS) {
-        printf("Rubrica piena!\n");
-        return;
+
+//Funzione aggiunta contatto (memoria dinamica)
+void addContact(Contact **contacts, int *count, int *capacity) {
+
+    //se pieno, espandi 
+    if (*count >= *capacity) {
+        *capacity *= 2;
+        Contact*temp = realloc(*contacts, (*capacity) * sizeof(Contact));
+
+        if (temp == NULL) {
+            printf("Errore allocazione memoria!\n");
+            return;
+        }
+        *contacts = temp; 
     }
 
+
     printf("Nome: ");
-    scanf("%s", contacts[*count].name);
+    scanf("%s", (*contacts)[*count].name);
 
     printf("Telefono: ");
-    scanf("%s", contacts[*count].phone);
+    scanf("%s", (*contacts)[*count].phone);
 
     (*count)++;
 
@@ -29,7 +39,7 @@ void addContact(Contact contacts[], int *count) {
 
 }
 //Funzione visualizzazione
-void showContacts(Contact contacts[], int count) {
+void showContacts(Contact *contacts, int count) {
     if (count == 0) {
         printf("Nessun contatto.\n");
         return;
@@ -44,7 +54,7 @@ void showContacts(Contact contacts[], int count) {
 
 
 // Funzione ricerca
-void searchContact(Contact contacts[], int count) {
+void searchContact(Contact *contacts, int count) {
     char searchName[50];
     int found = 0;
 
@@ -72,9 +82,10 @@ void searchContact(Contact contacts[], int count) {
 
 
 int main() {
-    Contact *contacts = malloc(MAX_CONTACTS * sizeof(Contact));
+    int capacity = 2;
+    Contact *contacts = malloc(capacity * sizeof(Contact));
     int count = 0;
-    int choice;
+    int choice; 
 
     while (1) {
         printf("\n===== RUBRICA =====\n");
@@ -88,20 +99,20 @@ int main() {
         switch (choice) {
 
         case 1:
-            addContact(contacts, &count);
+            addContact(&contacts, &count, &capacity);
             break;
 
         case 2:
-            showContacts(contacts, count);
+            showContacts(&contacts, count);
             break;
         
         case 3:
-            searchContact(contacts, count);
+            searchContact(&contacts, count);
             break;
 
         case 4:
-            printf("Uscita...\n");
             free(contacts);
+            printf("Uscita...\n");
             return 0;
 
 
