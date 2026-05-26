@@ -10,6 +10,47 @@ typedef struct {
 } Contact;
 
 
+//Funzione caricameto 
+
+
+
+//Funzione cariamento contatti
+void loadContacts(Contact* contacts, int *count, int capacity) {
+    FILE* f = fopen("contacts.txt","r");
+
+    if (f == NULL) {
+        printf("Nessun file trovato, inizio vuoto.\n");
+        return;
+    }
+    while (*count < capacity && fscanf(f, "%s %s",contacts[*count].name,contacts[*count].phone) == 2) {
+        (*count)++;
+    }
+    fclose(f);
+
+    printf("Contatti caricati!\n");
+
+}
+
+//Funzione salva contatti
+void saveContacts(Contact* contacts, int count) {
+
+    FILE* f = fopen("contacts.txt", "a");
+
+    if (f == NULL) {
+        printf("Errore apertura file!\n");
+        return;
+    }
+
+    for (int i = 0; i < count; i++) {
+        fprintf(f, "%s %s\n",
+            contacts[i].name,
+            contacts[i].phone);
+    }
+
+    fclose(f);
+
+    printf("Contatti salvati!\n");
+}
 
 //Funzione aggiunta contatto (memoria dinamica)
 void addContact(Contact **contacts, int *count, int *capacity) {
@@ -93,6 +134,8 @@ int main() {
         printf("2. Visualizza contatti\n");
         printf("3. Cerca contatto\n");
         printf("4. Esci\n");
+        printf("5. Salva su file\n");
+        printf("6. Carica da file\n");
         printf("Scelta: ");
         scanf("%d", &choice);
 
@@ -103,17 +146,23 @@ int main() {
             break;
 
         case 2:
-            showContacts(&contacts, count);
+            showContacts(contacts, count);
             break;
         
         case 3:
-            searchContact(&contacts, count);
+            searchContact(contacts, count);
             break;
 
         case 4:
             free(contacts);
             printf("Uscita...\n");
             return 0;
+        case 5:
+            saveContacts(contacts, count);
+            break;
+        case 6: 
+            loadContacts(contacts, &count, capacity);
+            break;
 
 
 
