@@ -72,7 +72,7 @@ void searchContact(Contact contacts[], int count) {
 
 
 int main() {
-    Contact contacts[MAX_CONTACTS];
+    Contact *contacts = malloc(MAX_CONTACTS * sizeof(Contact));
     int count = 0;
     int choice;
 
@@ -101,6 +101,7 @@ int main() {
 
         case 4:
             printf("Uscita...\n");
+            free(contacts);
             return 0;
 
 
